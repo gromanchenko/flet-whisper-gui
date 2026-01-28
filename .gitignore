@@ -1,0 +1,41 @@
+# Output directories
+out/
+Transcripts/
+Audio/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+ll.code-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp files
+output.txt
+*.log
+
+# Speaker enrollment data
+speaker_enrollment.json
+
+# Configuration (Use config.example.toml for template)
+config.toml
+# Internal Docs
+intus/
+
+# Secrets
+secrets.toml

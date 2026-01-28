@@ -1,0 +1,7 @@
+flet==0.80.2
+sounddevice>=0.4.6
+numpy>=1.26.0
+faster-whisper>=1.0.0
+webrtcvad>=2.0.10
+resemblyzer>=0.1.4
+toml>=0.10.0

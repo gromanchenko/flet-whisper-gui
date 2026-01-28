@@ -1,0 +1,26 @@
+[whisper]
+model_size = "small"
+model_path = ""
+language = "auto"
+task = "transcribe"
+initial_prompt = "Hello. This is a technical transcription covering software engineering, Python development, and system administration."
+
+[vad]
+min_silence_duration_ms = 500
+max_speech_duration_s = 10
+min_speech_duration_ms = 250
+speech_pad_ms = 30
+
+[storage]
+transcript_dir = "./Transcripts"
+audio_dir = "./Audio"
+audio_format = "wav"
+ffmpeg_path = "ffmpeg"
+keep_media = false
+keep_text = true
+
+[speaker]
+strict_mode = true
+min_enroll_seconds = 60
+similarity_threshold = 0.75
+ui_only_my_voice = false

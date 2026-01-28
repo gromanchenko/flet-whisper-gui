@@ -1,0 +1,49 @@
+name: Build
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' # 3.10 is stable for Flet/App
+          
+      - name: Install Dependencies
+        run: |
+          pip install flet
+          pip install -r requirements.txt
+          
+      - name: Build Executable (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          flet pack app.py --icon assets/icon.ico --name Huisper
+          
+      - name: Build Executable (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          flet pack app.py --icon assets/icon.png --name Huisper
+          
+      - name: Build Executable (macOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          flet pack app.py --icon assets/icon.png --name Huisper
+          
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: huisper-${{ matrix.os }}
+          path: dist/
