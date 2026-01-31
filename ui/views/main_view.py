@@ -207,8 +207,8 @@ class MainView(ft.View):
         save_config_dict(self.config)
         self.pg.update()
 
-    def on_copy(self, e):
-        self.pg.set_clipboard(self.txt_transcript.value)
+    async def on_copy(self, e):
+        await self.pg.clipboard.set(self.txt_transcript.value)
         self.pg.overlay.append(ft.SnackBar(content=ft.Text("Copied to clipboard"), open=True))
         self.pg.update()
 

@@ -122,7 +122,7 @@ class SettingsView(ft.View):
             ft.AppBar(
                 title=ft.Text("Settings"),
                 leading=ft.IconButton(ft.Icons.ARROW_BACK, on_click=lambda e: self.on_navigate_home()),
-                bgcolor=ft.Colors.SURFACE_VARIANT
+                bgcolor="#1E1E1E"
             ),
             ft.Container(
                 content=ft.Column([
@@ -158,7 +158,7 @@ class SettingsView(ft.View):
                 ], spacing=20),
                 padding=20,
                 width=600, # Max width for readability
-                alignment=ft.alignment.top_center
+                alignment=ft.Alignment.TOP_CENTER
             )
         ]
 

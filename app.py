@@ -113,32 +113,34 @@ def main(page: ft.Page):
     ctx['stop_recording_fn'] = stop_recording
 
     # --- PUBSUB HANDLER ---
+    ui_lock = threading.Lock()
     def on_pubsub(msg):
-        # Dispatch to active view (MainView only needs these)
-        if len(page.views) > 0 and isinstance(page.views[-1], MainView):
-            view = page.views[-1]
-            try:
-                if isinstance(msg, str):
-                    view.set_status(msg)
-                elif isinstance(msg, dict):
-                    mtype = msg.get('type')
-                    if mtype == 'audio_level':
-                        # Handle numpy scalar
-                        rms = msg['rms']
-                        if hasattr(rms, 'item'): rms = rms.item()
-                        view.update_volume(rms)
-                    elif mtype == 'timer':
-                        view.update_timer(msg['value'])
-                    else:
-                        # Transcription
-                        txt = msg.get('text', '')
-                        if txt:
-                            view.append_text(txt)
-                            if ctx['storage']: ctx['storage'].write_transcript(msg)
-                view.update()
-            except Exception as e:
-                # Handle view disposed errors gracefully
-                print(f"View update error: {e}")
+        with ui_lock:
+            # Dispatch to active view (MainView only needs these)
+            if len(page.views) > 0 and isinstance(page.views[-1], MainView):
+                view = page.views[-1]
+                try:
+                    if isinstance(msg, str):
+                        view.set_status(msg)
+                    elif isinstance(msg, dict):
+                        mtype = msg.get('type')
+                        if mtype == 'audio_level':
+                            # Handle numpy scalar
+                            rms = msg['rms']
+                            if hasattr(rms, 'item'): rms = rms.item()
+                            view.update_volume(rms)
+                        elif mtype == 'timer':
+                            view.update_timer(msg['value'])
+                        else:
+                            # Transcription
+                            txt = msg.get('text', '')
+                            if txt:
+                                view.append_text(txt)
+                                if ctx['storage']: ctx['storage'].write_transcript(msg)
+                    view.update()
+                except Exception as e:
+                    # Handle view disposed errors gracefully
+                    print(f"View update error: {e}")
 
     page.pubsub.subscribe(on_pubsub)
 
@@ -192,4 +194,4 @@ def main(page: ft.Page):
     atexit.register(stop_recording)
 
 if __name__ == "__main__":
-    ft.app(main)
+    ft.run(main)
